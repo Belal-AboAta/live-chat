@@ -10,10 +10,10 @@ export interface ChatWindowInputIconProps {
 
 export const ChatWindowInputIcon: React.FC<
   ChatWindowInputIconProps & React.ComponentProps<"button">
-> = ({ icon, onClick, className }) => {
+> = ({ icon, onClick, className, type }) => {
   return (
     <Button
-      type="button"
+      type={type ? type : "button"}
       variant="outline"
       className={clsx(
         "bg-gray-100 hover:bg-gray-400 cursor-pointer",
