@@ -4,7 +4,11 @@ import { Server as SocketIOServer } from "socket.io";
 
 var app = express();
 var http = createServer(app);
-var io = new SocketIOServer(http);
+var io = new SocketIOServer(http, {
+  cors: {
+    origin: "*",
+  },
+});
 
 io.on("connection", function (socket) {
   console.log("user connected");
