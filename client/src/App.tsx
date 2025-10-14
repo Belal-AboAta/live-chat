@@ -1,7 +1,9 @@
+import { ChatApp } from "./containers/ChatApp";
+
 import "./App.css";
 
 function App() {
-  return <> APP </>;
+  return <ChatApp />;
 }
 
 export default App;
