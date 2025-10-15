@@ -21,6 +21,9 @@ export const ChatApp: React.FC = () => {
     <div className="flex h-screen gap-8 p-8">
       <ChatsList users={users} />
       <ChatWindow
+        currentUser={
+          user || { id: "", name: "", avatarUrl: "", isConnected: false }
+        }
         messages={messages}
         onSendMessage={onSendMessage}
         onAttachFile={onAttachFile}

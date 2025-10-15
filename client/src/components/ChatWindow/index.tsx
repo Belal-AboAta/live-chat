@@ -1,12 +1,16 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
 
+import { useTyping } from "@/hooks/useTyping";
+import type { IMessage } from "@/types/message";
+import type { IUser } from "@/types/user";
 import { ChatHeader } from "../ChatHeader";
 import { ChatMessage } from "../ChatMessage";
 import { ChatWindowInput } from "../ChatWindowInput";
-import type { IMessage } from "@/types/message";
+import { UserTyping } from "../UserTyping";
 
 export interface ChatWindowProps {
+  currentUser: IUser;
   chatTitle?: string;
   chatSubtitle?: string;
   messages: IMessage[];
@@ -16,6 +20,7 @@ export interface ChatWindowProps {
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
+  currentUser,
   chatTitle = "Chat Title",
   chatSubtitle = "Subtitle or status",
   messages,
@@ -24,6 +29,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   onVioceInput,
 }) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const { currentUsers, onTypingDebounce, onStopTypingDebounce } =
+    useTyping(currentUser);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -49,10 +56,17 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           />
         ))}
       </div>
+      {currentUsers && currentUsers.length > 0 && (
+        <UserTyping users={currentUsers} />
+      )}
       <ChatWindowInput
         onSendMessage={onSendMessage}
         onAttachFile={onAttachFile}
         onVoiceInput={onVioceInput}
+        onTyping={() => {
+          onTypingDebounce(currentUser);
+          onStopTypingDebounce(currentUser);
+        }}
       />
     </div>
   );

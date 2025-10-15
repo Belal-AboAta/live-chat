@@ -9,12 +9,14 @@ export interface ChatWindowInputProps {
   onSendMessage?: (message: string) => void;
   onAttachFile?: () => void;
   onVoiceInput?: () => void;
+  onTyping?: () => void;
 }
 
 export const ChatWindowInput: React.FC<ChatWindowInputProps> = ({
   onSendMessage,
   onAttachFile,
   onVoiceInput,
+  onTyping,
 }) => {
   const iconsSize = 5;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +41,12 @@ export const ChatWindowInput: React.FC<ChatWindowInputProps> = ({
     >
       <ChatWindowInputIcon icon={Icons.image} onClick={onAttachFile} />
       <ChatWindowInputIcon icon={Icons.mic} onClick={onVoiceInput} />
-      <Input type="text" placeholder="Write your message..." ref={inputRef} />
+      <Input
+        type="text"
+        placeholder="Write your message..."
+        ref={inputRef}
+        onChange={onTyping}
+      />
       <ChatWindowInputIcon
         type="submit"
         className="bg-primary text-white hover:bg-primary/20"

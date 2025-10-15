@@ -4,6 +4,7 @@ export const users = [
     name: "Mohamed Hany",
     isConnected: false,
     isSelected: false,
+    isTyping: false,
     avatarUrl:
       "https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRs86hFvI4k2pxAAuAKCvJduTV7NKv_bh8M00HHbsbXoFF0anF8JP-Bo9nY-7ft4_0v",
   },
@@ -12,6 +13,7 @@ export const users = [
     name: "Hamada Tolba",
     isConnected: false,
     isSelected: false,
+    isTyping: false,
     avatarUrl:
       "https://img.a.transfermarkt.technology/portrait/big/158014-1513325588.jpg?lm=1",
   },
@@ -20,6 +22,7 @@ export const users = [
     name: "Ahmed Atef Kota",
     isConnected: false,
     isSelected: false,
+    isTyping: false,
     avatarUrl: "https://semedia.filgoal.com/Photos/Person/Medium/222826.png",
   },
   {
@@ -27,6 +30,7 @@ export const users = [
     name: "Shehata Abo Kf",
     isConnected: false,
     isSelected: false,
+    isTyping: false,
     avatarUrl: "https://media.filfan.com/NewsPics/FilfanNew/large/314616_0.jpg",
   },
   {
@@ -34,6 +38,7 @@ export const users = [
     name: "Sayed Neymar",
     isConnected: false,
     isSelected: false,
+    isTyping: false,
     avatarUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgaLHoQb_q3Mrvqc8I_NHFOG1rd_eUJ2SjdZXIQUSmb1BtcSE7ZmMTdlpJO_oFdfXqiRhcx6ifvxENYDJlII9oYkaLS3lZvNP5tm9F5i5I",
   },
@@ -75,5 +80,12 @@ export function getUser() {
     return selectedUser;
   } else {
     return null;
+  }
+}
+
+export function setUserTypingStatus(id, isTyping) {
+  const user = getUserById(id);
+  if (user) {
+    user.isTyping = isTyping;
   }
 }

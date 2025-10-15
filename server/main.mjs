@@ -8,6 +8,7 @@ import {
   getUser,
   setUserConnectionStatus,
   toggleUserSelection,
+  setUserTypingStatus,
 } from "./users.mjs";
 
 var app = express();
@@ -52,6 +53,16 @@ io.on("connection", function (socket) {
     io.emit("connected users", users);
     console.log("a user disconnected");
     console.log(users);
+  });
+
+  socket.on("user typing", function (user) {
+    setUserTypingStatus(user.id, true);
+    io.emit("user typing", users);
+  });
+
+  socket.on("user stop typing", function (user) {
+    setUserTypingStatus(user.id, false);
+    io.emit("user stop typing", users);
   });
 
   socket.on("chat message", function (msg) {
