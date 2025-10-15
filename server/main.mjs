@@ -1,6 +1,14 @@
 import express from "express";
+import cors from "cors";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
+
+import {
+  users,
+  getUser,
+  setUserConnectionStatus,
+  toggleUserSelection,
+} from "./users.mjs";
 
 var app = express();
 var http = createServer(app);
@@ -10,8 +18,42 @@ var io = new SocketIOServer(http, {
   },
 });
 
+const corsOptions = {
+  origin: "*",
+};
+
+app.use(cors(corsOptions));
+
+app.get("/users", function (_, res) {
+  res.json(users);
+});
+
+app.get("/user", function (_, res) {
+  const user = getUser();
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: "No available users" });
+  }
+});
+
 io.on("connection", function (socket) {
-  console.log("user connected");
+  socket.on("user connected", function (userId) {
+    setUserConnectionStatus(userId, true);
+    toggleUserSelection(userId, true);
+    io.emit("connected users", users);
+    console.log("a user connected");
+    console.log(users);
+  });
+
+  socket.on("user disconnected", function (userId) {
+    toggleUserSelection(userId, false);
+    setUserConnectionStatus(userId, false);
+    io.emit("connected users", users);
+    console.log("a user disconnected");
+    console.log(users);
+  });
+
   socket.on("chat message", function (msg) {
     io.emit("chat message", msg);
   });
