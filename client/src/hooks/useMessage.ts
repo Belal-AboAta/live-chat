@@ -3,21 +3,19 @@ import { v4 as uuidv4 } from "uuid";
 
 import { socket } from "@/network/socket";
 import type { IMessage } from "@/types/message";
+import type { IUser } from "@/types/user";
 
-export const useMessage = () => {
-  socket.connect();
-
+export const useMessage = (user: IUser) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const userId = uuidv4();
 
   const onSendMessage = (message: string) => {
     const newMessage: IMessage = {
       id: uuidv4(),
       chatId: "1",
-      senderId: userId,
+      senderId: user.id,
       content: message,
       timestamp: new Date(),
-      avatarUrl: "https://i.pravatar.cc/150?img=3",
+      avatarUrl: user.avatarUrl,
     };
     socket.emit("chat message", newMessage);
   };
@@ -35,16 +33,15 @@ export const useMessage = () => {
   // }, []);
 
   useEffect(() => {
-    console.log("Setting up socket listener for chat messages");
     socket.on("chat message", (message: IMessage) => {
-      message.isUser = message.senderId === userId;
+      message.isUser = message.senderId === user.id;
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
       socket.off("chat message");
     };
-  }, [userId]);
+  }, [user.id]);
 
   return {
     messages,
