@@ -6,4 +6,7 @@ export interface IMessage {
   timestamp: Date;
   isUser?: boolean;
   avatarUrl?: string;
+  isSent?: boolean;
+  isRecieved?: boolean;
+  isRead?: boolean;
 }

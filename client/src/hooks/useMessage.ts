@@ -33,9 +33,17 @@ export const useMessage = (user: IUser) => {
   // }, []);
 
   useEffect(() => {
-    socket.on("chat message", (message: IMessage) => {
-      message.isUser = message.senderId === user.id;
-      setMessages((prevMessages) => [...prevMessages, message]);
+    socket.on("chat message", (messages: IMessage[], message: IMessage) => {
+      messages.forEach(
+        (message) => (message.isUser = message.senderId === user.id),
+      );
+      setMessages(messages);
+      if (message && user.id && message.senderId !== user.id) {
+        const audio = new Audio("./notification-sound.mp3");
+        audio.play();
+        socket.emit("receive message", message);
+        socket.emit("read message", message);
+      }
     });
 
     return () => {

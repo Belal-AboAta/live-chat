@@ -10,6 +10,14 @@ import {
   toggleUserSelection,
   setUserTypingStatus,
 } from "./users.mjs";
+import {
+  addMessage,
+  messages,
+  updateSentStatus,
+  updateReceivedStatus,
+  updateReadStatus,
+  updateAllMessagesStatus,
+} from "./messsages.mjs";
 
 var app = express();
 var http = createServer(app);
@@ -43,16 +51,12 @@ io.on("connection", function (socket) {
     setUserConnectionStatus(userId, true);
     toggleUserSelection(userId, true);
     io.emit("connected users", users);
-    console.log("a user connected");
-    console.log(users);
   });
 
   socket.on("user disconnected", function (userId) {
     toggleUserSelection(userId, false);
     setUserConnectionStatus(userId, false);
     io.emit("connected users", users);
-    console.log("a user disconnected");
-    console.log(users);
   });
 
   socket.on("user typing", function (user) {
@@ -66,8 +70,21 @@ io.on("connection", function (socket) {
   });
 
   socket.on("chat message", function (msg) {
-    io.emit("chat message", msg);
+    addMessage(msg);
+    updateSentStatus(msg.id, true);
+    io.emit("chat message", messages, msg);
   });
+
+  socket.on("received message", function (msg) {
+    updateAllMessagesStatus("received", true);
+    io.emit("chat message", messages);
+  });
+
+  socket.on("read message", function (msg) {
+    updateAllMessagesStatus("read", true);
+    io.emit("chat message", messages);
+  });
+
   socket.on("disconnect", function () {
     console.log("user disconnected");
   });

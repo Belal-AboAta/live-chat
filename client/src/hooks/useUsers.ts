@@ -19,8 +19,6 @@ export const useUsers = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("user connected event emitted");
-      console.log(socket.connected);
       socket.emit("user connected", user.id);
 
       const handleBeforeUnload = () => {
@@ -29,9 +27,8 @@ export const useUsers = () => {
 
       window.addEventListener("beforeunload", handleBeforeUnload);
 
-
       return () => {
-        window.removeEventListener('beforeunload', handleBeforeUnload);
+        window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
   }, [user]);

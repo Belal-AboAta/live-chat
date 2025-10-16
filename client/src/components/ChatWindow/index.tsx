@@ -53,6 +53,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             message={message.content}
             isUser={message.isUser}
             avatarUrl={message.avatarUrl}
+            isSent={message.isSent}
+            isRecieved={message.isRecieved}
+            isRead={message.isRead}
           />
         ))}
       </div>
